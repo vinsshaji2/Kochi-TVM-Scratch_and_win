@@ -1,0 +1,234 @@
+/* =======================
+   GLOBAL STYLES
+======================= */
+
+body {
+    background-image: url("../images/background.jpg");
+    background-size: cover;
+/*    background-position: center;*/
+/*    background-repeat: no-repeat;*/
+
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    margin-top: 50px;
+    padding: 20px;
+}
+
+/* =======================
+   BOX GRID
+======================= */
+
+.boxes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.box {
+    width: 160px;
+    height: 160px;
+    border-radius: 20px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* =======================
+   BOX IMAGE (SCRATCHED)
+======================= */
+
+.box-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    transition: opacity 0.3s ease;
+}
+
+/* Hover animation */
+.box:hover {
+    transform: scale(1.05) rotate(2deg);
+    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5);
+}
+
+/* =======================
+   OPENED STATE
+======================= */
+
+.box.opened {
+    transform: scale(1.1);
+    pointer-events: none;
+}
+
+.box.opened .box-image {
+    opacity: 0.3;
+}
+
+.box.opened::after {
+    content: "🎉";
+    position: absolute;
+    font-size: 60px;
+    animation: celebrate 0.6s ease-out;
+}
+
+@keyframes celebrate {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* =======================
+   RESULT TEXT
+======================= */
+
+#result {
+    margin-top: 40px;
+    font-size: 22px;
+}
+
+/* =======================
+   MODAL
+======================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: linear-gradient(145deg, #e0df14, #f0ef14);
+    margin: 15% auto;
+    padding: 40px;
+    border: 2px solid #f9f9f9;
+    border-radius: 25px;
+    width: 80%;
+    max-width: 500px;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideDown 0.4s ease;
+    position: relative;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.close {
+    color: #ffd700;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #fff;
+}
+
+#modalBody h2 {
+    color: #f9f9f9;
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+#rewardText {
+    font-size: 26px;
+    color: #fff;
+    margin-top: 20px;
+}
+
+/* =======================
+   TITLE ANIMATION
+======================= */
+
+.title,
+.subtitle {
+    will-change: transform, opacity;
+}
+
+.title {
+    animation: slideFade 1.2s ease-out forwards,
+               glow 2s infinite alternate;
+}
+
+@keyframes slideFade {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px rgba(255,255,255,0.4);
+    }
+    to {
+        text-shadow: 0 0 25px rgba(255,215,0,0.9);
+    }
+}
+
+/* =======================
+   RESPONSIVE
+======================= */
+
+@media (max-width: 768px) {
+    .boxes {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .box {
+        width: 130px;
+        height: 130px;
+    }
+}
+.whatsapp-btn {
+    margin-top: 25px;
+    padding: 14px 28px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: #25D366;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.whatsapp-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.6);
+}
