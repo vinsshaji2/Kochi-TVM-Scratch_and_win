@@ -1,45 +1,60 @@
-/****************************
- * GLOBAL STATE
- ****************************/
+/*********************************
+ * GLOBAL STATE (VERCEL SAFE)
+ *********************************/
 
-// Always read module from localStorage (Vercel-safe)
+// Always read module from localStorage
 const selectedModule =
     localStorage.getItem("selectedModule") || "module not selected";
 
-// Store reward globally for WhatsApp redirect
-window.lastRewardText = null;
+// Global reward state
+window.lastRewardText = localStorage.getItem("lastRewardText") || null;
 
 
-/****************************
+/*********************************
+ * HELPER: SAVE REWARD SAFELY
+ *********************************/
+function setReward(reward) {
+    window.lastRewardText = reward;
+    localStorage.setItem("lastRewardText", reward);
+}
+
+
+/*********************************
  * OPEN BOX LOGIC
- ****************************/
-
+ *********************************/
 function openBox(element) {
-    // Prevent opening more than one box
-    if (document.querySelector('.opened')) return;
+
+    // If already opened visually, just show popup
+    if (document.querySelector('.opened')) {
+        showAlreadyScratchedPopup();
+        return;
+    }
 
     fetch('/open-box', { method: 'POST' })
         .then(res => res.json())
         .then(data => {
+
+            /* ✅ FIRST TIME SCRATCH */
             if (data.reward) {
-                // Mark box as opened
                 element.classList.add('opened');
 
-                // Store reward
-                window.lastRewardText = data.reward;
+                setReward(data.reward);
 
-                // Update modal text
                 document.getElementById('rewardText').textContent = data.reward;
-
-                // Show modal
                 document.getElementById('rewardModal').style.display = 'block';
 
-                // Optional display
                 const result = document.getElementById("result");
                 if (result) {
                     result.innerHTML = `<h3>You received: ${data.reward}</h3>`;
                 }
-            } else if (data.error) {
+            }
+
+            /* 🔁 ALREADY SCRATCHED */
+            else if (data.error === "Already scratched") {
+                showAlreadyScratchedPopup();
+            }
+
+            else if (data.error) {
                 alert(data.error);
             }
         })
@@ -50,16 +65,33 @@ function openBox(element) {
 }
 
 
-/****************************
- * MODAL HANDLING
- ****************************/
+/*********************************
+ * SHOW POPUP IF ALREADY SCRATCHED
+ *********************************/
+function showAlreadyScratchedPopup() {
+    const savedReward = localStorage.getItem("lastRewardText");
 
+    if (savedReward) {
+        setReward(savedReward);
+        document.getElementById('rewardText').textContent = savedReward;
+    } else {
+        document.getElementById('rewardText').textContent =
+            "You have already claimed your reward.";
+    }
+
+    document.getElementById('rewardModal').style.display = 'block';
+}
+
+
+/*********************************
+ * MODAL HANDLING
+ *********************************/
 function closeModal() {
     document.getElementById('rewardModal').style.display = 'none';
 }
 
-// Close modal ONLY when clicking outside modal-content
-window.onclick = function(event) {
+// Close modal only when clicking outside modal-content
+window.onclick = function (event) {
     const modal = document.getElementById('rewardModal');
     if (event.target === modal) {
         modal.style.display = 'none';
@@ -67,10 +99,9 @@ window.onclick = function(event) {
 };
 
 
-/****************************
+/*********************************
  * PRICE LOGIC
- ****************************/
-
+ *********************************/
 function getBasePrice(module) {
     if (!module) return 1500;
 
@@ -82,15 +113,17 @@ function getBasePrice(module) {
 }
 
 
-/****************************
+/*********************************
  * WHATSAPP REDIRECT
- ****************************/
-
+ *********************************/
 function redirectToWhatsApp() {
-    const rewardText = window.lastRewardText;
+
+    const rewardText =
+        window.lastRewardText ||
+        localStorage.getItem("lastRewardText");
 
     if (!rewardText) {
-        alert("Reward not found. Please try again.");
+        alert("Reward already claimed. Please contact support.");
         return;
     }
 
@@ -107,15 +140,15 @@ function redirectToWhatsApp() {
         const finalPrice = basePrice - discountAmount;
 
         msg =
-          `Hey Team, I got ${percent}% Discount for ${moduleName}. ` +
-          `The price is ₹${finalPrice}.`;
+            `Hey Team, I got ${percent}% Discount for ${moduleName}. ` +
+            `The price is ₹${finalPrice}.`;
     } else {
         msg =
-          `Hey Team, I got ${rewardText} for ${moduleName}. ` +
-          `The base price is ₹${basePrice}.`;
+            `Hey Team, I got ${rewardText} for ${moduleName}. ` +
+            `The base price is ₹${basePrice}.`;
     }
 
-    const academyNumber = "917034942438"; // 🔴 replace if needed
+    const academyNumber = "917034942438"; // 🔴 change if needed
     const url = `https://wa.me/${academyNumber}?text=${encodeURIComponent(msg)}`;
 
     window.open(url, "_blank");
