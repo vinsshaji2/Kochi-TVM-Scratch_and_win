@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Mystery Box Offer</title>
+
+    <!-- ✅ Mobile friendly -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
 
 <div class="container">
+    <!-- ✅ FIXED h1 -->
     <h1 class="title">Scratch & Win Amazing Prizes!</h1>
     <p class="subtitle">Pick any one card and reveal your reward</p>
 
     <p id="instruction" class="instruction">
-      👇 Select a card to begin
+        👇 Select a card to begin
     </p>
 
     <div class="boxes">
@@ -37,26 +43,31 @@
 
     <div id="result"></div>
 
-    <!-- Popup Modal -->
+    <!-- =====================
+         POPUP MODAL
+    ====================== -->
     <div id="rewardModal" class="modal">
-        <div class="modal-content">
+        <!-- 🔥 STOP CLICK BUBBLING -->
+        <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close" onclick="closeModal()">&times;</span>
+
             <div id="modalBody">
                 <h2>🎉 Congratulations! 🎉</h2>
                 <p id="rewardText"></p>
-                        <!-- 🔥 ADD THIS BUTTON -->
-              <button class="whatsapp-btn" onclick="redirectToWhatsApp()">
-                📲 Claim on WhatsApp
-              </button>
+
+                <!-- ✅ WhatsApp Button -->
+                <button
+                    type="button"
+                    class="whatsapp-btn"
+                    onclick="redirectToWhatsApp()">
+                    📲 Claim on WhatsApp
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-
-
 <script src="/static/js/box.js"></script>
-
 
 </body>
 </html>
