@@ -58,13 +58,29 @@
 
 <div class="card">
     <h1>🎓 Choose Your Module</h1>
-    <form method="POST">
-        <input type="text" name="module" placeholder="Enter Module (Sprechen, Lesen, Hören, Schreiben)" required>
-        <button>Continue</button>
+
+    <!-- ✅ IMPORTANT CHANGE HERE -->
+    <form method="POST" onsubmit="saveModule()">
+        <input
+            type="text"
+            id="moduleInput"
+            name="module"
+            placeholder="Enter Module (Sprechen, Lesen, Hören, Schreiben)"
+            required
+        >
+        <button type="submit">Continue</button>
     </form>
 </div>
+
 <script>
-  const selectedModule = localStorage.getItem("selectedModule") || "module not selected";
+/* 🔥 THIS FIXES EVERYTHING */
+function saveModule() {
+    const module = document.getElementById("moduleInput").value.trim();
+
+    if (module) {
+        localStorage.setItem("selectedModule", module);
+    }
+}
 </script>
 
 </body>
