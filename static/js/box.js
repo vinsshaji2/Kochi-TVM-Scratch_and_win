@@ -3,8 +3,8 @@
  *********************************/
 
 // Always read module from localStorage
-const selectedModule =
-    localStorage.getItem("selectedModule") || "module not selected";
+//const selectedModule =
+//    localStorage.getItem("selectedModule") || "module not selected";
 
 // Global reward state
 window.lastRewardText = localStorage.getItem("lastRewardText") || null;
@@ -23,6 +23,11 @@ function setReward(reward) {
  * OPEN BOX LOGIC
  *********************************/
 function openBox(element) {
+    const moduleName = localStorage.getItem("selectedModule");
+        if (!moduleName) {
+            alert("Please select a module before scratching.");
+            return;
+        }
 
     // If already opened visually, just show popup
     if (document.querySelector('.opened')) {
@@ -127,11 +132,17 @@ function redirectToWhatsApp() {
         return;
     }
 
-    const moduleName = selectedModule;
+    // ✅ ALWAYS read module fresh
+    const moduleName = localStorage.getItem("selectedModule");
+
+    if (!moduleName) {
+        alert("Module is not selected. Please go back and select a module.");
+        return;
+    }
+
     const basePrice = getBasePrice(moduleName);
     let msg = "";
 
-    // Match "5% Discount", "10% Discount", etc.
     const percentMatch = rewardText.match(/(\d+)\s*%\s*Discount/i);
 
     if (percentMatch) {
@@ -148,8 +159,9 @@ function redirectToWhatsApp() {
             `The base price is ₹${basePrice}.`;
     }
 
-    const academyNumber = "917034942438"; // 🔴 change if needed
+    const academyNumber = "917034942438";
     const url = `https://wa.me/${academyNumber}?text=${encodeURIComponent(msg)}`;
 
     window.open(url, "_blank");
 }
+

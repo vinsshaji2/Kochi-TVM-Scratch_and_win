@@ -232,3 +232,9 @@ body {
     transform: scale(1.05);
     box-shadow: 0 10px 25px rgba(37, 211, 102, 0.6);
 }
+
+.logo{
+    width:200px;
+    height:10px;
+
+}

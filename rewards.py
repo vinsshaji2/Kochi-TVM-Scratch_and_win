@@ -6,6 +6,8 @@ REWARDS = [
     {"name": "15% Discount 🔥", "weight": 25},
     {"name": "13% Discount 🔥", "weight": 30},
     {"name": "8% Discount 🎉", "weight": 25},
+    {"name": "9% Discount 🎉", "weight": 25},
+    {"name": "12% Discount 🎉", "weight": 25},
 ]
 
 def pick_reward():
